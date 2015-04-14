@@ -23,9 +23,18 @@ module VagrantPlugins
 
         private
 
+        # Force Vagrant::Bundler#init! to be enabled
+        # @return [Hash<String => String>]
+        def env_for_restarted_process
+          {
+            "VAGRANT_INTERNAL_BUNDLERIZED" => nil,
+            "VAGRANT_FORCE_BUNDLER" => "1",
+          }
+        end
+
         def restart
           puts "Restarting vagrant..."
-          exec "#{$0} #{ARGV * ' '}"
+          exec(env_for_restarted_process, "#{$0} #{ARGV * ' '}")
         end
       end
     end
