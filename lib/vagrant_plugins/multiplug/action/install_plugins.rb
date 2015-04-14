@@ -24,7 +24,7 @@ module VagrantPlugins
         private
 
         # Force Vagrant::Bundler#init! to be enabled
-        # @return [Hash<String => String>]
+        # @return [Hash<String => Object>]
         def env_for_restarted_process
           {
             "VAGRANT_INTERNAL_BUNDLERIZED" => nil,
