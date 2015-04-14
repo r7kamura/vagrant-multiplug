@@ -7,7 +7,7 @@ module VagrantPlugins
         end
 
         def call(env)
-          restart if env[:machine].config.plugin.dependencies.any? do |dependency|
+          results = env[:machine].config.plugin.dependencies.map do |dependency|
             case
             when dependency.installed?
               false
@@ -17,12 +17,14 @@ module VagrantPlugins
               exit(1)
             end
           end
+          restart if results.any?
           @app.call(env)
         end
 
         private
 
         def restart
+          puts "Restarting vagrant..."
           exec "#{$0} #{ARGV * ' '}"
         end
       end

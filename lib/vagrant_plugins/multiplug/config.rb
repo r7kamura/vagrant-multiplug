@@ -20,8 +20,15 @@ module VagrantPlugins
         @version = version
       end
 
+      # @note ::Vagrant.has_plugin?(@name, @version) cannot be used because it looks up from caches
       def installed?
-        ::Vagrant.has_plugin?(@name, @version)
+        `vagrant plugin list`.each_line.any? do |line|
+          if @version
+            line == "#{@name} (#{@version})\n"
+          else
+            line.start_with?("#{@name} (")
+          end
+        end
       end
 
       # @return [String] Command-line options for `vagrant plugin install NAME`
